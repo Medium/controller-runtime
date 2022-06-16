@@ -188,7 +188,7 @@ type resultAdapter struct {
 	metric *prometheus.CounterVec
 }
 
-func (r *resultAdapter) Increment(_ context.Context, code, method, host string) {
+func (r *resultAdapter) Increment(code, method, host string) {
 	r.metric.WithLabelValues(code, method, host).Inc()
 }
 

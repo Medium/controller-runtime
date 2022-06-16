@@ -128,7 +128,7 @@ func (ks *Kind) Start(ctx context.Context, handler handler.EventHandler, queue w
 
 		// Tries to get an informer until it returns true,
 		// an error or the specified context is cancelled or expired.
-		if err := wait.PollImmediateUntilWithContext(ctx, 10*time.Second, func(ctx context.Context) (bool, error) {
+		if err := wait.PollImmediateUntil(10*time.Second, func() (bool, error) {
 			// Lookup the Informer from the Cache and add an EventHandler which populates the Queue
 			i, lastErr = ks.cache.GetInformer(ctx, ks.Type)
 			if lastErr != nil {
@@ -140,7 +140,7 @@ func (ks *Kind) Start(ctx context.Context, handler handler.EventHandler, queue w
 				return false, nil // Retry.
 			}
 			return true, nil
-		}); err != nil {
+		}, make(<-chan struct{})); err != nil {
 			if lastErr != nil {
 				ks.started <- fmt.Errorf("failed to get informer from cache: %w", lastErr)
 				return
