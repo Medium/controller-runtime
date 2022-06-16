@@ -128,7 +128,7 @@ func (ks *Kind) Start(ctx context.Context, handler handler.EventHandler, queue w
 
 		// Tries to get an informer until it returns true,
 		// an error or the specified context is cancelled or expired.
-		if err := wait.PollImmediateInfinite(10*time.Second, func(ctx context.Context) (bool, error) {
+		if err := wait.PollImmediateInfinite(10*time.Second, func() (bool, error) {
 			// Lookup the Informer from the Cache and add an EventHandler which populates the Queue
 			i, lastErr = ks.cache.GetInformer(ctx, ks.Type)
 			if lastErr != nil {
